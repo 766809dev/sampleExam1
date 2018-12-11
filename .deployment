@@ -1,0 +1,2 @@
+[config]
+Command = deploy.cmd
