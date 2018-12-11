@@ -1,8 +1,8 @@
 @echo off 
 
 echo —Delete ROOT.war 
-del %DEPLOYMENT_TARGET%\webapps\ROOT.war
-echo ---Rename app to ROOT.war 
-rename d:\home\site\repository\sample1\target\*.war ROOT.war
-echo ---File is moved to webapp folder
+del %DEPLOYMENT_TARGET%\webapps\*.war
+echo ---Copy File to webapp folder
 copy d:\home\site\repository\sample1\target\*.war %DEPLOYMENT_TARGET%\webapps\*.war
+echo ---Rename File to ROOT.war 
+rename %DEPLOYMENT_TARGET%\webapps\*.war ROOT.war
