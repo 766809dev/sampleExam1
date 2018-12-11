@@ -175,6 +175,7 @@ public class MyUI extends UI {
         
             VerticalLayout statusL = new VerticalLayout();
             statusL.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+            statusL.setHeight("20%");
             statusL.addComponent(status);
 
             book.addClickListener(e -> {
