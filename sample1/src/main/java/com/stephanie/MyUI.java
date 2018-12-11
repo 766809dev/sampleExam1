@@ -119,7 +119,7 @@ public class MyUI extends UI {
                 isAlcoholServed = selected.getValue().stream().map(Room::getAlcohol).anyMatch(Predicate.isEqual(true));
                 roomsBooked = selected.getValue().stream().map(Room::getName).collect(Collectors.joining(" , ")) ;
                 Notification.show("Capacity: " + totalCapacity + "\n" + roomsBooked
-                    + " selected" + "\nboolean check: " + isAlcoholServed);
+                    + " selected " + "\nboolean check: " + isAlcoholServed);
             });
             // * * * END GRID
             
