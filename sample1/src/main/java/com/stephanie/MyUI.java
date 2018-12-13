@@ -1,69 +1,64 @@
 package com.stephanie;
 
-import javax.lang.model.element.Element;
-import javax.servlet.annotation.WebServlet;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.awt.ActiveEvent;
-import java.awt.event.ItemListener;
-import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-// TEST
-
-import java.lang.Object;
-import com.vaadin.data.provider.*;
-
-// END TEST
+import javax.servlet.annotation.WebServlet;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.data.Result;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.ContentMode;
-import com.vaadin.shared.ui.slider.SliderOrientation;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Grid;
+import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.*;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.MultiSelect;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Slider;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Grid.Column;
-import com.vaadin.ui.Grid.SelectionMode;
-import com.vaadin.ui.components.grid.ItemClickListener;
 
 /**
  * Created by SBaille on 05/12/2018 - Sample Assessment
  * 
  * This UI is the application entry point.
  * <p>
- * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be 
- * overridden to add component to the user interface and initialize non-component functionality.
+ * The UI is initialized using {@link #init(VaadinRequest)}. This method is
+ * intended to be overridden to add component to the user interface and
+ * initialize non-component functionality.
  */
 @Theme("mytheme")
 public class MyUI extends UI {
-    //Connection to database
+    // Connection to database
     Connection connection = null;
 
     static int roomCap, totCap = 0, numRoom = 0;
     static boolean roomAlcohol, isAlcoholServed;
-    static int totalCapacity=0;
+    static int totalCapacity = 0;
     static String roomsBooked;
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
-        //final
+        // final
         final VerticalLayout layout = new VerticalLayout();
         layout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-        // use if required:  layout.setWidth("75%");
+        // use if required: layout.setWidth("75%");
 
         // "Static" Labels - no updates
-        Label logo = new Label("<H1>Marty Party Planners</H1> <p/> <h3>Please enter the details below and click Book</h3> </p><br>", ContentMode.HTML);
+        Label logo = new Label(
+                "<H1>Marty Party Planners</H1> <p/> <h3>Please enter the details below and click Book</h3> </p><br>",
+                ContentMode.HTML);
         Label studentID = new Label("<h4>B00766809</h4> </p><br>", ContentMode.HTML);
 
         VerticalLayout vertGrid = new VerticalLayout();
@@ -130,6 +125,7 @@ public class MyUI extends UI {
             TextField partyName = new TextField();
             partyName.setCaption("Name of Party");
 
+            //Not used here
             TextField guest = new TextField();
             //check Placeholder
             guest.setPlaceholder("10");
