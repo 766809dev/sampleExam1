@@ -30,7 +30,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Created by SBaille on 05/12/2018 - Sample Assessment
+ * Updated by B00766809 on 14/12/2018 - New Db
+ * Created by B00766809 on 05/12/2018 - Sample Assessment
  * 
  * This UI is the application entry point.
  * <p>
@@ -52,8 +53,6 @@ public class MyUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         // final
         final VerticalLayout layout = new VerticalLayout();
-        layout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-        // use if required: layout.setWidth("75%");
 
         // "Static" Labels - no updates
         Label logo = new Label(
@@ -62,12 +61,21 @@ public class MyUI extends UI {
         Label studentID = new Label("<h4>B00766809</h4> </p><br>", ContentMode.HTML);
 
         VerticalLayout vertGrid = new VerticalLayout();
-        vertGrid.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
 
         //Database connection string
-        String connectionString = "jdbc:sqlserver://sampleexamserver1.database.windows.net:1433;" + 
-            "database=sampleExam1;" +
-            "user=stephanie@sampleexamserver1;" +
+        // String connectionString = "jdbc:sqlserver://sampleexamserver1.database.windows.net:1433;" + 
+        //     "database=sampleExam1;" +
+        //     "user=stephanie@sampleexamserver1;" +
+        //     "password=Pa$$w0rd;" +
+        //     "encrypt=true;" + 
+        //     "trustServerCertificate=false;" + 
+        //     "hostNameInCertificate=*.database.windows.net;" + 
+        //     "loginTimeout=30;";
+
+        // TEST NEW B00766809 Web App abd DB / SRFV for EXAM
+        String connectionString = "jdbc:sqlserver://b00766809server.database.windows.net:1433;" + 
+            "database=B00766809-Db;" +
+            "user=b00766809admin@b00766809server;" +
             "password=Pa$$w0rd;" +
             "encrypt=true;" + 
             "trustServerCertificate=false;" + 
@@ -77,23 +85,20 @@ public class MyUI extends UI {
         // ** ** ** 
         try
         {
-            //connect with JDBC driver to database
+            // Connect and query db
             connection = DriverManager.getConnection(connectionString);
-
-            //add query to db
             ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM roomTable;");
 
             //START Convert result to a List - refer to the Java class: Room.java
             List<Room> rooms = new ArrayList<Room>();
             while(rs.next())
             {
-                //Add a new Room with fields we want to see - might not want all fields available in Db itself
+                //Add new Room object with fields we want to see - might not want all fields available in Db itself
                 rooms.add(new Room(rs.getString("name"),
                     rs.getInt("capacity"),
                     rs.getString("feature"),
                     rs.getBoolean("alcohol")));
             }
-            //END Convert to List
 
             // * * * START GRID
             //Create the grid
@@ -104,7 +109,7 @@ public class MyUI extends UI {
             roomGrid.addColumn(Room::getFeature).setCaption("Feature");
             roomGrid.addColumn(Room::getAlcohol).setCaption("Alcohol Served?");
             roomGrid.setSizeFull();
-            // multiselect mode
+            // Multiselect mode - adds checkboxes column
             roomGrid.setSelectionMode(SelectionMode.MULTI);
             MultiSelect<Room> selected = roomGrid.asMultiSelect();
 
@@ -119,17 +124,11 @@ public class MyUI extends UI {
             // * * * END GRID
             
 
-            // * * * START HERE Horizontal layout -  party name/slider/children attending
-            HorizontalLayout details = new HorizontalLayout();
+            // * * * START HERE Horizontal layout & elements -  party name/slider/children attending
+            final HorizontalLayout details = new HorizontalLayout();
 
             TextField partyName = new TextField();
             partyName.setCaption("Name of Party");
-
-            //Not used here
-            TextField guest = new TextField();
-            //check Placeholder
-            guest.setPlaceholder("10");
-            guest.setWidth("50%");
 
             // * * * START SLIDER
             //Add Slider
@@ -140,7 +139,12 @@ public class MyUI extends UI {
             numGuestSlider.setValue(10.0);
             numGuestSlider.setMax(300.0);
         
-            //Slider value changes
+            //Slider / guest value changes - Not used here
+            TextField guest = new TextField();
+            //check Placeholder
+            guest.setPlaceholder("10");
+            guest.setWidth("50%");
+
             numGuestSlider.addValueChangeListener(e->{
                 double x = numGuestSlider.getValue();
                 guest.setValue(""+x);
@@ -156,23 +160,18 @@ public class MyUI extends UI {
                     x = numGuestSlider.getMin();
                 }
                 numGuestSlider.setValue(x);
-            }); //END guest addValue
+            }); //END Slider / guest addValue
             // * * * END SLIDER
 
             //Children attending
             ComboBox<String> children = new ComboBox<>("Children Attending?");
             children.setItems("Yes", "No");
             children.setPlaceholder("No option selected");
+            
             // * * * END HERE Horizontal element name/slider/children
 
-            // * * * START HERE Vertical element book
-            Label status = new Label("<strong>Your party is not booked yet.</strong>", ContentMode.HTML); 
             Button book = new Button("Book");
-        
-            VerticalLayout statusL = new VerticalLayout();
-            statusL.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
-            statusL.setHeight("20%");
-            statusL.addComponent(status);
+            Label status = new Label("<strong>Your party is not booked yet.</strong>", ContentMode.HTML); 
 
             book.addClickListener(e -> {
                 if(roomGrid.getSelectedItems().size() == 0) {
@@ -195,17 +194,14 @@ public class MyUI extends UI {
                     status.setValue("<strong>You have selected rooms with a max capacity of " + totalCapacity + " which is not enough to hold" + numGuestSlider.getValue().intValue() + ".</strong>");
                     return;
                 }
+                
                 status.setValue("<h3>Success! The party is booked now</h3>");
-            statusL.addComponent(status);
             });
-        // * * * END HERE Vertical element book
 
         //Master Layout
         details.addComponents(partyName, numGuestSlider, children);
-        //VerticalLayout booking = new VerticalLayout();
-        //booking.addComponents(book, statusL);
         vertGrid.addComponent(roomGrid);
-        layout.addComponents(logo, details, book, statusL, vertGrid, studentID);
+        layout.addComponents(logo, details, book, status, vertGrid, studentID);
         
         }
         catch (Exception e)
